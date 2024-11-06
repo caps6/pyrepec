@@ -102,7 +102,7 @@ class TestRepecMethods(unittest.TestCase):
         self.assertIsInstance(res, RepecSingleResult)
         self.assertIsInstance(res.error, RepecError)
         self.assertTrue(len(res.data) == 0)
-    
+
     def test_errors(self) -> None:
         """Testing method for errors."""
 
@@ -110,6 +110,7 @@ class TestRepecMethods(unittest.TestCase):
         err_func, err_msg = self.test_repec.get_error(err_code)
         self.assertEqual(err_func, "code")
         self.assertEqual(err_msg, "User code is missing")
+
 
 if __name__ == "__main__":
     unittest.main()

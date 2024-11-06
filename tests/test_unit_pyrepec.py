@@ -10,7 +10,7 @@ from pyrepec.repec import (
     GET_AUTHOR_RECORD_FULL,
     GET_INST_AUTHORS,
     GET_JEL_FOR_ITEM,
-    GET_REF
+    GET_REF,
 )
 
 from pyrepec.models import (
@@ -49,8 +49,10 @@ def mocked_http_error_request(*args, **kwargs):
 def mocked_empty_requests(*args, **kwargs):
     return MockResponse(args[0], [])
 
+
 def mocked_empty_test(*args, **kwargs):
     return MockResponse(args[0], [], text="")
+
 
 def mocked_requests(*args, **kwargs):
     params = kwargs["params"]
@@ -80,7 +82,7 @@ def mocked_requests(*args, **kwargs):
         handle = params[GET_REF]
         if handle == "someitemid":
             return MockResponse(url, [{"key": "value"}])
-        
+
     return MockResponse(url, [{"error": "2"}])
 
 
@@ -186,6 +188,7 @@ def test_get_ref_empty(mck) -> None:
     assert isinstance(res, RepecSingleResult)
     assert res.error is not None
     assert res.data == {}
+
 
 @patch("requests.Session.get", side_effect=mocked_requests)
 def test_get_ref(mck) -> None:
