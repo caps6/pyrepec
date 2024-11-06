@@ -20,9 +20,9 @@ sys.path.insert(0, os.path.abspath(".."))
 project = "pyrepec"
 copyright = "2024, Giuseppe Acito, Andrea Capitanelli"
 author = "Giuseppe Acito, Andrea Capitanelli"
-version = "0.0.1""
+version = "0.2.0"
 # The full version, including alpha/beta/rc tags
-release = "0.0.1"
+release = "0.1.7"
 
 
 # -- General configuration ---------------------------------------------------

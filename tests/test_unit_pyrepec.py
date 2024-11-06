@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import pytest
+import json
 from unittest.mock import patch
+
 
 from pyrepec import Repec
 from pyrepec.repec import (
@@ -8,6 +10,7 @@ from pyrepec.repec import (
     GET_AUTHOR_RECORD_FULL,
     GET_INST_AUTHORS,
     GET_JEL_FOR_ITEM,
+    GET_REF
 )
 
 from pyrepec.models import (
@@ -25,9 +28,10 @@ class HttpException(Exception):
 class MockResponse:
     """Mock a requests.Response."""
 
-    def __init__(self, url, json_data, should_fail=False):
+    def __init__(self, url, json_data, should_fail=False, text=None):
         self.url = url
         self.json_data = json_data
+        self.text = json.dumps(json_data) if not text else text
         self.should_fail = should_fail
 
     def json(self):
@@ -45,6 +49,8 @@ def mocked_http_error_request(*args, **kwargs):
 def mocked_empty_requests(*args, **kwargs):
     return MockResponse(args[0], [])
 
+def mocked_empty_test(*args, **kwargs):
+    return MockResponse(args[0], [], text="")
 
 def mocked_requests(*args, **kwargs):
     params = kwargs["params"]
@@ -70,6 +76,11 @@ def mocked_requests(*args, **kwargs):
         if handle == "someitemid":
             return MockResponse(url, ["jel1", "jel2"])
 
+    if GET_REF in params:
+        handle = params[GET_REF]
+        if handle == "someitemid":
+            return MockResponse(url, [{"key": "value"}])
+        
     return MockResponse(url, [{"error": "2"}])
 
 
@@ -164,3 +175,24 @@ def test_jel_codes(mck) -> None:
     assert isinstance(res, RepecJelResult)
     assert isinstance(res.error, RepecError)
     assert len(res.data) == 0
+
+
+@patch("requests.Session.get", side_effect=mocked_empty_test)
+def test_get_ref_empty(mck) -> None:
+    """Testing method for item authors."""
+    item_id = "someitemid"
+    repec = Repec("somecode")
+    res = repec.get_ref(item_id)
+    assert isinstance(res, RepecSingleResult)
+    assert res.error is not None
+    assert res.data == {}
+
+@patch("requests.Session.get", side_effect=mocked_requests)
+def test_get_ref(mck) -> None:
+    """Testing method for item authors."""
+    item_id = "someitemid"
+    repec = Repec("somecode")
+    res = repec.get_ref(item_id)
+    assert isinstance(res, RepecSingleResult)
+    assert res.data == {"key": "value"}
+    assert res.error is None
