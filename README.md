@@ -39,3 +39,4 @@ Featured methods:
 - get_authors_for_item(item_id: str)
 - get_jel_codes(item_id: str)
 - get_error(err_code: int)
+- get_ref(item_id: str)
