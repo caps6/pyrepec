@@ -5,7 +5,7 @@
 
 A python client for [RePEc API](https://ideas.repec.org/api.html).
 
-Current Version: 0.2.0
+Current Version: 0.2.1
 
 Report any bugs by opening an issue here: (https://github.com/TBD)
 

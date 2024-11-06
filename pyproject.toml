@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyrepec"
-version = "0.2.0"
+version = "0.2.1"
 description = "Python client for RePec API"
 authors = ["Giuseppe Acito", "Andrea Capitanelli"]
 license = "MIT"
