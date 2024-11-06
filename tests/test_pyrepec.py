@@ -88,6 +88,20 @@ class TestRepecMethods(unittest.TestCase):
         self.assertIsInstance(res, RepecJelResult)
         self.assertIsInstance(res.error, RepecError)
         self.assertTrue(len(res.data) == 0)
+
+    def test_get_ref(self) -> None:
+        item_id = "RePEc:eee:jmacro:v:65:y:2020:i:c:s0164070420301646"
+        res = self.test_repec.get_ref(item_id)
+        self.assertIsInstance(res, RepecSingleResult)
+        self.assertIsNone(res.error)
+        self.assertTrue(len(res.data))
+
+    def test_get_ref_empty(self) -> None:
+        item_id = "NON_ESISTO"
+        res = self.test_repec.get_ref(item_id)
+        self.assertIsInstance(res, RepecSingleResult)
+        self.assertIsInstance(res.error, RepecError)
+        self.assertTrue(len(res.data) == 0)
     
     def test_errors(self) -> None:
         """Testing method for errors."""

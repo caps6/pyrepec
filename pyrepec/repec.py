@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-from .models import RepecError, RepecResultList, RepecSingleResult, RepecJelResult
+from .models import (
+    RepecError,
+    RepecResultList,
+    RepecSingleResult,
+    RepecJelResult
+)
 
 import requests
 from requests import Response
@@ -16,7 +21,7 @@ GET_JEL_FOR_ITEM = "getjelforitem"
 GET_AUTHOR_RECORD_FULL = "getauthorrecordfull"
 GET_INST_AUTHORS = "getinstauthors"
 GET_AUTHORS_FOR_ITEM = "getauthorsforitem"
-
+GET_REF = "getref"
 
 class Repec:
     """
@@ -97,6 +102,16 @@ class Repec:
 
         return RepecJelResult(data=data, error=error)
 
+    def get_ref(self, item_id: str) -> RepecSingleResult:
+        """
+
+        """
+
+        data, error = self._request_data(GET_REF, item_id)
+
+        data = data[0] if len(data) else {}
+        return RepecSingleResult(data=data, error=error)
+        
     def get_error(self, err_code: int) -> list[str, str]:
         """
         Return the full error description given its numerical code.
@@ -179,6 +194,11 @@ class Repec:
         :rtype: tuple with a list of `dicts` and an object of
             :class:`models.RepecResultList`
         """
+
+        # if we are here but the response il empty, raise an error:
+        if len(resp.text.strip()) == 0:
+            return [], RepecError(code=404, message="Not found", url = resp.url)
+        
         # Try to JSON-decode the response.
         api_data = resp.json()
 

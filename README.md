@@ -1,10 +1,13 @@
 # PyRepec
 
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pyrepec)
+
+
 A python client for [RePEc API](https://ideas.repec.org/api.html).
 
-Current Version: 0.0.1
+Current Version: 0.2.0
 
-Report any bugs by opening an issue here: (https://github.com/caps6/pyrepec)
+Report any bugs by opening an issue here: (https://github.com/TBD)
 
 
 ### Usage
@@ -36,3 +39,4 @@ Featured methods:
 - get_authors_for_item(item_id: str)
 - get_jel_codes(item_id: str)
 - get_error(err_code: int)
+- get_ref(item_id: str)
