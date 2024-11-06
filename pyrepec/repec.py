@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-from .models import (
-    RepecError,
-    RepecResultList,
-    RepecSingleResult,
-    RepecJelResult
-)
+from .models import RepecError, RepecResultList, RepecSingleResult, RepecJelResult
 
 import requests
 from requests import Response
@@ -22,6 +17,7 @@ GET_AUTHOR_RECORD_FULL = "getauthorrecordfull"
 GET_INST_AUTHORS = "getinstauthors"
 GET_AUTHORS_FOR_ITEM = "getauthorsforitem"
 GET_REF = "getref"
+
 
 class Repec:
     """
@@ -78,7 +74,7 @@ class Repec:
 
     def get_authors_for_item(self, item_id: str) -> RepecResultList:
         """
-        Return the authors of a given paper or article.
+        Return the authors of an item (paper or article).
 
         :param item_id: Item ID for paper or article
         :return: author IDs
@@ -90,7 +86,7 @@ class Repec:
 
     def get_jel_codes(self, item_id: str) -> RepecJelResult:
         """
-        Return the list of JEL codes associated to a given item.
+        Return the list of JEL codes associated to an item.
 
         Items can be papers or articles and are identified by an item_id.
 
@@ -104,14 +100,20 @@ class Repec:
 
     def get_ref(self, item_id: str) -> RepecSingleResult:
         """
+        Return bibliographic references of an item.
 
+        Items can be papers or articles and are identified by an item_id.
+
+        :param item_id: ID of the item
+        :return: list of JEL codes
+        :rtype: an object of :class:`models.RepecSingleResult`
         """
 
         data, error = self._request_data(GET_REF, item_id)
-
         data = data[0] if len(data) else {}
+
         return RepecSingleResult(data=data, error=error)
-        
+
     def get_error(self, err_code: int) -> list[str, str]:
         """
         Return the full error description given its numerical code.
@@ -197,8 +199,8 @@ class Repec:
 
         # if we are here but the response il empty, raise an error:
         if len(resp.text.strip()) == 0:
-            return [], RepecError(code=404, message="Not found", url = resp.url)
-        
+            return [], RepecError(code=404, message="Not found", url=resp.url)
+
         # Try to JSON-decode the response.
         api_data = resp.json()
 
