@@ -35,6 +35,8 @@ jobs:
         key: venv-${{ hashFiles('poetry.lock') }}
     - name: Install project dependencies
       run: poetry install
-    - name: Run the automated tests (for example)
+    - name: Run tests
+      env: # Or as an environment variable
+        REPEC_TOKEN: ${{ secrets.TOKEN }}
       run: poetry run pytest ./tests/
       
